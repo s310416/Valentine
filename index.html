@@ -2,13 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Forever Valentine, Shreya</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For My Shreya</title>
     <style>
         :root {
             --rose: #ff4d6d;
             --blush: #ffb3c1;
             --dark-rose: #c9184a;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -21,9 +26,11 @@
             font-family: 'Georgia', serif;
             overflow: hidden;
             color: #333;
+            position: fixed; /* Prevents bouncing on mobile */
+            width: 100%;
         }
 
-        /* Start Overlay - Fixes Audio Issues */
+        /* Initial Overlay for Audio & UX */
         #startOverlay {
             position: fixed;
             top: 0;
@@ -31,96 +38,100 @@
             width: 100%;
             height: 100%;
             background: var(--rose);
-            z-index: 2000;
+            z-index: 3000;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             color: white;
-            transition: opacity 0.8s ease;
+            text-align: center;
+            padding: 20px;
         }
 
+        #startOverlay h1 { font-size: 2rem; margin-bottom: 20px; }
+
         #startOverlay button {
-            padding: 20px 40px;
-            font-size: 1.5rem;
+            padding: 18px 35px;
+            font-size: 1.2rem;
             background: white;
             color: var(--rose);
             border: none;
             border-radius: 50px;
-            cursor: pointer;
             font-weight: bold;
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
         .card {
             background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            padding: 30px 20px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
             text-align: center;
-            max-width: 550px;
             width: 90%;
+            max-width: 400px;
             z-index: 100;
-            position: relative;
+            transition: opacity 0.5s ease;
         }
 
-        h1 { color: var(--rose); font-size: 2.2rem; margin-bottom: 10px; }
-        
+        h1 { color: var(--rose); font-size: 1.8rem; margin-bottom: 10px; }
+        p { font-size: 1rem; line-height: 1.5; }
+
         .btn-container {
-            height: 120px;
+            min-height: 150px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 20px;
-            margin-top: 20px;
+            gap: 15px;
+            margin-top: 10px;
             position: relative;
         }
 
         .btn {
-            padding: 15px 30px;
-            font-size: 1.1rem;
+            padding: 15px 25px;
+            font-size: 1rem;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 80%;
+            display: block;
         }
 
-        #yesBtn { background: var(--rose); color: white; z-index: 101; }
-        #noBtn { background: white; color: var(--rose); border: 2px solid var(--rose); position: absolute; }
+        #yesBtn { background: var(--rose); color: white; position: relative; z-index: 101; }
+        #noBtn { background: white; color: var(--rose); border: 2px solid var(--rose); }
 
+        /* Polaroid Slideshow */
         .polaroid {
-            width: 280px;
+            width: 100%;
             background: white;
-            padding: 12px 12px 60px 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin: 20px auto;
-            transform: rotate(-2deg);
-            position: relative;
-            border: 1px solid #eee;
+            padding: 10px 10px 40px 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            margin: 15px 0;
+            transform: rotate(-1deg);
         }
 
         #slideshowImg {
             width: 100%;
-            height: 350px;
+            height: 280px; /* Perfect for mobile portrait */
             object-fit: cover;
-            transition: opacity 1s ease-in-out;
+            transition: opacity 0.8s ease-in-out;
         }
 
         .heartfelt-message {
             font-style: italic;
             color: #444;
-            margin-top: 20px;
-            border-left: 4px solid var(--rose);
-            padding-left: 15px;
+            font-size: 0.95rem;
             text-align: left;
-            min-height: 120px;
-            font-size: 1.1rem;
+            border-left: 3px solid var(--rose);
+            padding-left: 10px;
+            min-height: 100px;
         }
 
         .hidden { display: none; }
         
+        /* Floating Elements */
         .floating-item {
             position: fixed;
             top: -10%;
@@ -133,27 +144,24 @@
             to { transform: translateY(110vh) rotate(360deg); }
         }
 
-        .fade-in { animation: fadeIn 1.5s forwards; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .fade-in { animation: fadeIn 1s forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <div id="startOverlay">
-        <h1>For My Wife, Shreya</h1>
-        <button onclick="startExperience()">Open Your Surprise ❤️</button>
+        <h1>For My Wife, Shreya ❤️</h1>
+        <button onclick="startExperience()">Open Your Surprise</button>
     </div>
 
     <audio id="bgMusic" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg">
+        <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
     </audio>
 
     <div class="card" id="mainCard">
-        <h1>My Dearest Shreya...</h1>
-        <p>I wanted to ask you something special, but I know you love a challenge. Catch me if you can!</p>
+        <h1>Hey Shreya...</h1>
+        <p>I have a question, but you have to catch the button first! 😘</p>
         <div class="btn-container">
             <button class="btn" id="yesBtn">Will you be my Valentine?</button>
             <button class="btn" id="noBtn">No</button>
@@ -161,7 +169,7 @@
     </div>
 
     <div class="card hidden" id="successCard">
-        <h1>I Knew You'd Choose Me! ❤️</h1>
+        <h1>I love you, Shreya! ❤️</h1>
         <div class="polaroid">
             <img id="slideshowImg" src="" alt="Our Memories">
         </div>
@@ -178,7 +186,7 @@
             "https://raw.githubusercontent.com/s310416/Valentine/main/616832652_25488463550823027_3734716905551767143_n.jpg"
         ];
 
-        const message = "Shreya, my love... I knew you would catch me, just like I caught the greatest blessing in the world when you became my wife. You are my rock, my best friend, and the most beautiful part of my life. Every heartbeat of mine belongs to you. Thank you for always choosing me and for loving me so deeply. I love you more than words can ever say. Forever yours!";
+        const message = "My dearest Shreya, I knew you'd eventually catch me, just like I caught the greatest blessing in the world when you became my wife. You are my rock, my best friend, and the most beautiful soul I know. Every day with you is a gift. Thank you for choosing me every single day. I love you to the moon and back! Forever yours.";
 
         const yesBtn = document.getElementById('yesBtn');
         const noBtn = document.getElementById('noBtn');
@@ -191,45 +199,52 @@
         let yesHoverCount = 0;
         const maxYesHovers = 5;
 
-        // Start function to handle browser audio policy
         function startExperience() {
-            document.getElementById('startOverlay').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('startOverlay').style.display = 'none';
-                music.play().catch(error => console.log("Audio play failed:", error));
-            }, 800);
+            document.getElementById('startOverlay').style.display = 'none';
+            music.play();
         }
 
         const moveElement = (el) => {
-            const x = Math.random() * (window.innerWidth - el.offsetWidth);
-            const y = Math.random() * (window.innerHeight - el.offsetHeight);
+            // Keep buttons within safe mobile screen boundaries
+            const padding = 50;
+            const x = Math.random() * (window.innerWidth - el.offsetWidth - padding) + (padding/2);
+            const y = Math.random() * (window.innerHeight - el.offsetHeight - padding) + (padding/2);
             el.style.position = 'fixed';
             el.style.left = x + 'px';
             el.style.top = y + 'px';
+            el.style.width = 'auto'; // Reset width when flying
         };
 
-        // Yes Button Chase
-        yesBtn.addEventListener('mouseover', () => {
+        // Mobile uses touchstart or click for the chase
+        const handleChase = (e) => {
             if (yesHoverCount < maxYesHovers) {
+                e.preventDefault(); // Prevent accidental click
                 moveElement(yesBtn);
                 yesHoverCount++;
-                if(yesHoverCount === 1) yesBtn.innerText = "Too fast for you? 😉";
-                if(yesHoverCount === 3) yesBtn.innerText = "Almost there, Shreya!";
+                if(yesHoverCount === 1) yesBtn.innerText = "Almost! 😘";
+                if(yesHoverCount === 3) yesBtn.innerText = "Try harder, Shreya!";
                 if(yesHoverCount === 5) {
-                    yesBtn.innerText = "Okay, I'm yours! ❤️";
+                    yesBtn.innerText = "Okay, I give up! ❤️";
                     yesBtn.style.position = 'relative';
                     yesBtn.style.left = '0';
                     yesBtn.style.top = '0';
+                    yesBtn.style.width = '80%';
                 }
+            }
+        };
+
+        yesBtn.addEventListener('touchstart', handleChase);
+        yesBtn.addEventListener('click', (e) => {
+            if (yesHoverCount < maxYesHovers) {
+                handleChase(e);
+            } else {
+                showSuccess();
             }
         });
 
-        noBtn.addEventListener('mouseover', () => moveElement(noBtn));
-
-        yesBtn.addEventListener('click', () => {
-            if (yesHoverCount >= maxYesHovers) {
-                showSuccess();
-            }
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveElement(noBtn);
         });
 
         let currentPhotoIndex = 0;
@@ -239,7 +254,7 @@
                 slideImg.src = photos[currentPhotoIndex];
                 slideImg.style.opacity = 1;
                 currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
-            }, 500);
+            }, 800);
         }
 
         function showSuccess() {
@@ -260,23 +275,23 @@
                 if (i < message.length) {
                     typingText.innerHTML += message.charAt(i);
                     i++;
-                    setTimeout(type, 50);
+                    setTimeout(type, 40);
                 }
             }
             type();
         }
 
-        // Background Petals
+        // Optimized Floating Items for Mobile Performance
         setInterval(() => {
             const item = document.createElement('div');
             item.classList.add('floating-item');
-            item.innerHTML = ['❤️', '🌸', '✨', '💖', '🌹'][Math.floor(Math.random() * 5)];
+            item.innerHTML = ['❤️', '🌸', '✨', '💖'][Math.floor(Math.random() * 4)];
             item.style.left = Math.random() * 100 + 'vw';
-            item.style.fontSize = (Math.random() * 20 + 15) + 'px';
-            item.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            item.style.fontSize = (Math.random() * 15 + 15) + 'px';
+            item.style.animationDuration = (Math.random() * 2 + 4) + 's';
             document.body.appendChild(item);
-            setTimeout(() => item.remove(), 6000);
-        }, 400);
+            setTimeout(() => item.remove(), 5000);
+        }, 600);
     </script>
 </body>
 </html>
