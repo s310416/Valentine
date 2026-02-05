@@ -9,7 +9,6 @@
             --rose: #ff4d6d;
             --blush: #ffb3c1;
             --cream: #fff0f3;
-            --gold: #d4af37;
         }
 
         body {
@@ -24,25 +23,6 @@
             color: #333;
         }
 
-        /* Music Toggle Button */
-        #musicToggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.7);
-            border: none;
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            cursor: pointer;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
         .card {
             background: rgba(255, 255, 255, 0.95);
             padding: 40px;
@@ -52,12 +32,11 @@
             max-width: 550px;
             width: 90%;
             z-index: 100;
-            transition: all 0.5s ease;
+            position: relative;
         }
 
         h1 { color: var(--rose); font-size: 2.2rem; margin-bottom: 10px; }
-        p { font-size: 1.1rem; line-height: 1.6; }
-
+        
         .btn-container {
             height: 120px;
             display: flex;
@@ -75,30 +54,30 @@
             border-radius: 50px;
             cursor: pointer;
             font-weight: bold;
-            transition: transform 0.2s, background 0.3s;
+            transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        #yesBtn { background: var(--rose); color: white; position: relative; z-index: 101; }
+        #yesBtn { background: var(--rose); color: white; z-index: 101; }
         #noBtn { background: white; color: var(--rose); border: 2px solid var(--rose); position: absolute; }
 
-        .hidden { display: none; }
-        
-        /* Success Screen / Polaroid */
-        .wedding-frame {
-            width: 260px;
+        /* Slideshow / Polaroid Styles */
+        .polaroid {
+            width: 300px;
             background: white;
-            padding: 12px 12px 45px 12px;
+            padding: 15px 15px 60px 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             margin: 20px auto;
-            transform: rotate(-3deg);
-            border: 1px solid #eee;
+            transform: rotate(-2deg);
+            position: relative;
+            overflow: hidden;
         }
 
-        .wedding-frame img {
+        #slideshowImg {
             width: 100%;
-            height: 280px;
+            height: 350px;
             object-fit: cover;
+            transition: opacity 1s ease-in-out;
         }
 
         .heartfelt-message {
@@ -108,10 +87,12 @@
             border-left: 4px solid var(--rose);
             padding-left: 15px;
             text-align: left;
-            min-height: 100px;
+            min-height: 80px;
         }
 
-        /* Background Floating Items */
+        .hidden { display: none; opacity: 0; }
+        
+        /* Background Decorations */
         .floating-item {
             position: fixed;
             top: -10%;
@@ -137,11 +118,9 @@
         <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
     </audio>
 
-    <button id="musicToggle">🎵</button>
-
     <div class="card" id="mainCard">
-        <h1 id="mainTitle">Hey Beautiful...</h1>
-        <p>I have a very important question for you, but you'll have to catch the button first!</p>
+        <h1>Hey Beautiful...</h1>
+        <p>You know I love a good challenge. Catch the button if you want to see your surprise!</p>
         <div class="btn-container">
             <button class="btn" id="yesBtn">Will you be my Valentine?</button>
             <button class="btn" id="noBtn">No</button>
@@ -149,9 +128,9 @@
     </div>
 
     <div class="card hidden" id="successCard">
-        <h1>I Knew You'd Say Yes! ❤️</h1>
-        <div class="wedding-frame">
-            <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800" alt="Our Wedding">
+        <h1>I knew it would always be you! ❤️</h1>
+        <div class="polaroid">
+            <img id="slideshowImg" src="" alt="Our Memories">
         </div>
         <div class="heartfelt-message">
             <p id="typingText"></p>
@@ -159,44 +138,55 @@
     </div>
 
     <script>
+        // --- CONFIGURATION ---
+        // ADD YOUR PHOTO URLS HERE
+        const photos = [
+            "https://images.unsplash.com/photo-1511285560929-80b456fea0bc", // Wedding 1
+            "https://images.unsplash.com/photo-1519741497674-611481863552", // Wedding 2
+            "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8"  // Wedding 3
+        ];
+
+        const message = "I knew you would eventually catch me. Just like you always choose me every single day, I choose you forever. You are my rock, my best friend, and the most beautiful part of my life. Thank you for being mine. Happy Valentine's Day!";
+        // --- END CONFIGURATION ---
+
         const yesBtn = document.getElementById('yesBtn');
         const noBtn = document.getElementById('noBtn');
         const mainCard = document.getElementById('mainCard');
         const successCard = document.getElementById('successCard');
         const typingText = document.getElementById('typingText');
         const music = document.getElementById('bgMusic');
-        const musicToggle = document.getElementById('musicToggle');
+        const slideImg = document.getElementById('slideshowImg');
 
         let yesHoverCount = 0;
         const maxYesHovers = 5;
         let musicStarted = false;
 
-        const startMusic = () => {
+        // Function to start music on first interaction
+        const startSequence = () => {
             if (!musicStarted) {
-                music.play();
+                music.play().catch(e => console.log("Audio waiting for more interaction"));
                 musicStarted = true;
-                musicToggle.innerText = "🔊";
             }
         };
 
         const moveElement = (el) => {
+            startSequence();
             const x = Math.random() * (window.innerWidth - el.offsetWidth);
             const y = Math.random() * (window.innerHeight - el.offsetHeight);
             el.style.position = 'fixed';
             el.style.left = x + 'px';
             el.style.top = y + 'px';
-            startMusic(); // Starts music on first interaction
         };
 
-        // Yes Button Logic
+        // Button Logic
         yesBtn.addEventListener('mouseover', () => {
             if (yesHoverCount < maxYesHovers) {
                 moveElement(yesBtn);
                 yesHoverCount++;
-                if(yesHoverCount === 1) yesBtn.innerText = "Almost!";
-                if(yesHoverCount === 3) yesBtn.innerText = "Try again!";
+                if(yesHoverCount === 1) yesBtn.innerText = "Too slow! 😘";
+                if(yesHoverCount === 3) yesBtn.innerText = "Try harder!";
                 if(yesHoverCount === 5) {
-                    yesBtn.innerText = "Okay, I'm staying! Click me ❤️";
+                    yesBtn.innerText = "Okay, I give up! Click me ❤️";
                     yesBtn.style.position = 'relative';
                     yesBtn.style.left = '0';
                     yesBtn.style.top = '0';
@@ -204,25 +194,24 @@
             }
         });
 
+        noBtn.addEventListener('mouseover', () => moveElement(noBtn));
+
         yesBtn.addEventListener('click', () => {
             if (yesHoverCount >= maxYesHovers) {
                 showSuccess();
             }
         });
 
-        // No Button Logic (Always moves)
-        noBtn.addEventListener('mouseover', () => moveElement(noBtn));
-
-        // Music Toggle Logic
-        musicToggle.addEventListener('click', () => {
-            if (music.paused) {
-                music.play();
-                musicToggle.innerText = "🔊";
-            } else {
-                music.pause();
-                musicToggle.innerText = "🔇";
-            }
-        });
+        // Slideshow Logic
+        let currentPhotoIndex = 0;
+        function updateSlideshow() {
+            slideImg.style.opacity = 0; // Fade out
+            setTimeout(() => {
+                slideImg.src = photos[currentPhotoIndex];
+                slideImg.style.opacity = 1; // Fade in
+                currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+            }, 500);
+        }
 
         function showSuccess() {
             mainCard.classList.add('hidden');
@@ -230,12 +219,16 @@
                 mainCard.style.display = 'none';
                 successCard.classList.remove('hidden');
                 successCard.classList.add('fade-in');
+                
+                // Start Slideshow
+                slideImg.src = photos[0];
+                setInterval(updateSlideshow, 3000); // Changes every 3 seconds
+                
                 startTyping();
             }, 500);
         }
 
         function startTyping() {
-            const message = "I knew you would eventually catch me. Just like you always choose me every single day, I choose you forever. You are my rock, my best friend, and the most beautiful part of my life. Thank you for loving me exactly as I am. Happy Valentine's Day to my amazing wife!";
             let i = 0;
             function type() {
                 if (i < message.length) {
@@ -247,20 +240,22 @@
             type();
         }
 
-        // Floating Hearts and Flowers
-        function createFloatingItem() {
+        // Floating Decor
+        setInterval(() => {
             const item = document.createElement('div');
             item.classList.add('floating-item');
-            const icons = ['❤️', '🌸', '✨', '💖', '🌹'];
-            item.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+            item.innerHTML = ['❤️', '🌸', '✨', '💖'][Math.floor(Math.random() * 4)];
             item.style.left = Math.random() * 100 + 'vw';
             item.style.fontSize = (Math.random() * 20 + 15) + 'px';
             item.style.animationDuration = (Math.random() * 3 + 4) + 's';
             item.style.opacity = Math.random();
             document.body.appendChild(item);
             setTimeout(() => item.remove(), 6000);
-        }
-        setInterval(createFloatingItem, 400);
+        }, 400);
+
+        // Global trigger for mobile/desktop to ensure music plays
+        document.addEventListener('touchstart', startSequence);
+        document.addEventListener('mousemove', startSequence);
     </script>
 </body>
 </html>
