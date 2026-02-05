@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Forever Valentine</title>
+    <title>For My Forever Valentine, Shreya</title>
     <style>
         :root {
             --rose: #ff4d6d;
             --blush: #ffb3c1;
-            --cream: #fff0f3;
+            --dark-rose: #c9184a;
         }
 
         body {
@@ -21,6 +21,35 @@
             font-family: 'Georgia', serif;
             overflow: hidden;
             color: #333;
+        }
+
+        /* Start Overlay - Fixes Audio Issues */
+        #startOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--rose);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            transition: opacity 0.8s ease;
+        }
+
+        #startOverlay button {
+            padding: 20px 40px;
+            font-size: 1.5rem;
+            background: white;
+            color: var(--rose);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
         .card {
@@ -62,9 +91,9 @@
         #noBtn { background: white; color: var(--rose); border: 2px solid var(--rose); position: absolute; }
 
         .polaroid {
-            width: 320px;
+            width: 280px;
             background: white;
-            padding: 15px 15px 60px 15px;
+            padding: 12px 12px 60px 12px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             margin: 20px auto;
             transform: rotate(-2deg);
@@ -74,7 +103,7 @@
 
         #slideshowImg {
             width: 100%;
-            height: 380px;
+            height: 350px;
             object-fit: cover;
             transition: opacity 1s ease-in-out;
         }
@@ -86,7 +115,8 @@
             border-left: 4px solid var(--rose);
             padding-left: 15px;
             text-align: left;
-            min-height: 80px;
+            min-height: 120px;
+            font-size: 1.1rem;
         }
 
         .hidden { display: none; }
@@ -112,13 +142,18 @@
 </head>
 <body>
 
+    <div id="startOverlay">
+        <h1>For My Wife, Shreya</h1>
+        <button onclick="startExperience()">Open Your Surprise ❤️</button>
+    </div>
+
     <audio id="bgMusic" loop>
-        <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg">
     </audio>
 
     <div class="card" id="mainCard">
-        <h1>Hey Beautiful...</h1>
-        <p>You know I love a good challenge. Catch the button if you want to see your surprise!</p>
+        <h1>My Dearest Shreya...</h1>
+        <p>I wanted to ask you something special, but I know you love a challenge. Catch me if you can!</p>
         <div class="btn-container">
             <button class="btn" id="yesBtn">Will you be my Valentine?</button>
             <button class="btn" id="noBtn">No</button>
@@ -126,7 +161,7 @@
     </div>
 
     <div class="card hidden" id="successCard">
-        <h1>I knew you would choose me! ❤️</h1>
+        <h1>I Knew You'd Choose Me! ❤️</h1>
         <div class="polaroid">
             <img id="slideshowImg" src="" alt="Our Memories">
         </div>
@@ -143,7 +178,7 @@
             "https://raw.githubusercontent.com/s310416/Valentine/main/616832652_25488463550823027_3734716905551767143_n.jpg"
         ];
 
-        const message = "I knew you would eventually catch me. Just like you always choose me every single day, I choose you forever. You are my rock, my best friend, and the most beautiful part of my life. Thank you for being mine. Happy Valentine's Day to my amazing wife!";
+        const message = "Shreya, my love... I knew you would catch me, just like I caught the greatest blessing in the world when you became my wife. You are my rock, my best friend, and the most beautiful part of my life. Every heartbeat of mine belongs to you. Thank you for always choosing me and for loving me so deeply. I love you more than words can ever say. Forever yours!";
 
         const yesBtn = document.getElementById('yesBtn');
         const noBtn = document.getElementById('noBtn');
@@ -155,17 +190,17 @@
 
         let yesHoverCount = 0;
         const maxYesHovers = 5;
-        let musicStarted = false;
 
-        const startSequence = () => {
-            if (!musicStarted) {
-                music.play().catch(() => {}); 
-                musicStarted = true;
-            }
-        };
+        // Start function to handle browser audio policy
+        function startExperience() {
+            document.getElementById('startOverlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('startOverlay').style.display = 'none';
+                music.play().catch(error => console.log("Audio play failed:", error));
+            }, 800);
+        }
 
         const moveElement = (el) => {
-            startSequence();
             const x = Math.random() * (window.innerWidth - el.offsetWidth);
             const y = Math.random() * (window.innerHeight - el.offsetHeight);
             el.style.position = 'fixed';
@@ -173,13 +208,15 @@
             el.style.top = y + 'px';
         };
 
+        // Yes Button Chase
         yesBtn.addEventListener('mouseover', () => {
             if (yesHoverCount < maxYesHovers) {
                 moveElement(yesBtn);
                 yesHoverCount++;
-                if(yesHoverCount === 1) yesBtn.innerText = "Too slow! 😘";
+                if(yesHoverCount === 1) yesBtn.innerText = "Too fast for you? 😉";
+                if(yesHoverCount === 3) yesBtn.innerText = "Almost there, Shreya!";
                 if(yesHoverCount === 5) {
-                    yesBtn.innerText = "Okay, I'm yours! Click me ❤️";
+                    yesBtn.innerText = "Okay, I'm yours! ❤️";
                     yesBtn.style.position = 'relative';
                     yesBtn.style.left = '0';
                     yesBtn.style.top = '0';
@@ -229,20 +266,17 @@
             type();
         }
 
+        // Background Petals
         setInterval(() => {
             const item = document.createElement('div');
             item.classList.add('floating-item');
-            item.innerHTML = ['❤️', '🌸', '✨', '💖'][Math.floor(Math.random() * 4)];
+            item.innerHTML = ['❤️', '🌸', '✨', '💖', '🌹'][Math.floor(Math.random() * 5)];
             item.style.left = Math.random() * 100 + 'vw';
             item.style.fontSize = (Math.random() * 20 + 15) + 'px';
             item.style.animationDuration = (Math.random() * 3 + 4) + 's';
             document.body.appendChild(item);
             setTimeout(() => item.remove(), 6000);
         }, 400);
-
-        // Ensures music starts when they move or touch
-        document.addEventListener('mousemove', startSequence, {once: true});
-        document.addEventListener('touchstart', startSequence, {once: true});
     </script>
 </body>
 </html>
